@@ -82,7 +82,7 @@ registerBlockType( 'core/gallery', {
 					const validImages = filter( attributes, ( { id, url } ) => id && url );
 					if ( validImages.length > 0 ) {
 						return createBlock( 'core/gallery', {
-							images: validImages.map( ( { id, url, alt } ) => ( { id, url, alt } ) ),
+							images: validImages.map( ( { id, url, alt, caption } ) => ( { id, url, alt, caption } ) ),
 						} );
 					}
 					return createBlock( 'core/gallery' );
@@ -140,7 +140,7 @@ registerBlockType( 'core/gallery', {
 				blocks: [ 'core/image' ],
 				transform: ( { images } ) => {
 					if ( images.length > 0 ) {
-						return images.map( ( { id, url, alt } ) => createBlock( 'core/image', { id, url, alt } ) );
+						return images.map( ( { id, url, alt, caption } ) => createBlock( 'core/image', { id, url, alt, caption } ) );
 					}
 					return createBlock( 'core/image' );
 				},
