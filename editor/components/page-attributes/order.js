@@ -2,12 +2,13 @@
  * External dependencies
  */
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { withInstanceId } from '@wordpress/components';
+import { withAPIData, withInstanceId } from '@wordpress/components';
 import { compose } from '@wordpress/element';
 
 /**
@@ -15,9 +16,13 @@ import { compose } from '@wordpress/element';
  */
 import PageAttributesCheck from './check';
 import { editPost } from '../../store/actions';
-import { getEditedPostAttribute } from '../../store/selectors';
+import { getCurrentPostType, getEditedPostAttribute } from '../../store/selectors';
 
-export function PageAttributesOrder( { onUpdateOrder, instanceId, order } ) {
+export function PageAttributesOrder( { onUpdateOrder, instanceId, order, postType } ) {
+	if ( ! get( postType, 'data.supports.page-attributes', false ) ) {
+		return null;
+	}
+
 	const setUpdatedOrder = ( event ) => {
 		const newOrder = Number( event.target.value );
 		if ( newOrder >= 0 ) {
@@ -46,6 +51,7 @@ export function PageAttributesOrder( { onUpdateOrder, instanceId, order } ) {
 const applyConnect = connect(
 	( state ) => {
 		return {
+			postTypeSlug: getCurrentPostType( state ),
 			order: getEditedPostAttribute( state, 'menu_order' ),
 		};
 	},
@@ -58,7 +64,16 @@ const applyConnect = connect(
 	}
 );
 
+const applyWithAPIData = withAPIData( ( props ) => {
+	const { postTypeSlug } = props;
+
+	return {
+		postType: `/wp/v2/types/${ postTypeSlug }?context=edit`,
+	};
+} );
+
 export default compose( [
 	applyConnect,
+	applyWithAPIData,
 	withInstanceId,
 ] )( PageAttributesOrder );
