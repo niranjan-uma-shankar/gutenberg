@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { connect } from 'react-redux';
-import { map } from 'lodash';
+import { isEmpty, map } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -19,6 +19,9 @@ import { getEditedPostAttribute } from '../../store/selectors';
 import { editPost } from '../../store/actions';
 
 export function PageTemplate( { availableTemplates, selectedTemplate, instanceId, onUpdateTemplate } ) {
+	if ( isEmpty( availableTemplates ) ) {
+		return null;
+	}
 	const selectId = `template-selector-${ instanceId }`;
 
 	// Disable reason: A select with an onchange throws a warning
