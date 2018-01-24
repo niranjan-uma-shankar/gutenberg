@@ -24,3 +24,12 @@ import './audio';
 import './block';
 import './paragraph';
 import './subhead';
+
+import './layout-post-comment-form';
+import './layout-post-comment-list';
+import './layout-post-content';
+import './layout-post-date';
+import './layout-post-navigation';
+import './layout-post-sharing';
+// import './layout-post-tagline';
+// import './layout-post-title';
